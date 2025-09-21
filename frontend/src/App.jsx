@@ -8,6 +8,10 @@ import LoginPage from "./components/LoginPage";
 function App() {
 
 const router = createBrowserRouter([
+   {
+    path: "/",
+    element:<Dashboard/>
+  },
   {
     path: "/register",
     element:<RegisterPage/>
@@ -16,10 +20,7 @@ const router = createBrowserRouter([
     path: "/login",
     element:<LoginPage/>
   },
-  {
-    path: "/dashboard",
-    element:<Dashboard/>
-  },
+ 
 ]
 )
   return (
