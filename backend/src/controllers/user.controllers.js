@@ -56,9 +56,9 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   // console.log("req file==>",req.files)
   const avatarLocalPath = req.files?.avatar?.[0]?.path;
-  if (!avatarLocalPath) {
-    throw new apiError(402, "Avatar is required");
-  }
+  // if (!avatarLocalPath) {
+  //   throw new apiError(402, "Avatar is required");
+  // }
 
   const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
   console.log("coverimage=>", coverImageLocalPath);

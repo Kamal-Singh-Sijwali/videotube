@@ -6,6 +6,13 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOncloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.model.js";
 
+// ============ All videos without login ============
+const allVideos = asyncHandler(async(req,res)=>{
+   const videos  = await Video.find()
+   console.log("*******",videos)
+    return res.status(200)
+       .json(new apiResponse(200,videos,"all videos fetched without login"))
+})
 // ============== Get all videos ===========
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
@@ -177,4 +184,4 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
   })
 
 
-export { publishVideo, getVideoById, updateVideoDetails,deleteVideo,togglePublishStatus,getAllVideos}
+export {allVideos, publishVideo, getVideoById, updateVideoDetails,deleteVideo,togglePublishStatus,getAllVideos}
