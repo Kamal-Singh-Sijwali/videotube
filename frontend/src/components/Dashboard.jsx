@@ -1,6 +1,8 @@
 import { Menubar } from "primereact/menubar";
 import { Card } from "primereact/card";
 import { useState, useEffect } from "react";
+import Sidepanel from "./Sidepanel";
+
 
 const Dashboard = () => {
   const navbar = [
@@ -45,6 +47,7 @@ const Dashboard = () => {
   return (
     <div>
       <Menubar model={navbar} />
+      <Sidepanel/>
       <div
         style={{
           display: "grid",
