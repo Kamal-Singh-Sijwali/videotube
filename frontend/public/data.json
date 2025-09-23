@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Chantal Stiller",
+    "profileImage": "https://randomuser.me/api/portraits/women/44.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1503264116251-35a269479413",
+    "description": "Travel enthusiast and lifestyle blogger sharing stories from around the world.",
+    "uploaded": "3 days ago",
+    "views": "15M views"
+  },
+  {
+    "name": "Rajiv Menon",
+    "profileImage": "https://randomuser.me/api/portraits/men/32.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1522199710521-72d69614c702",
+    "description": "Tech geek and startup mentor passionate about building scalable solutions.",
+    "uploaded": "1 week ago",
+    "views": "8.2M views"
+  },
+  {
+    "name": "Lena Torres",
+    "profileImage": "https://randomuser.me/api/portraits/women/68.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+    "description": "Digital artist exploring surrealism and abstract visual storytelling.",
+    "uploaded": "2 days ago",
+    "views": "4.7M views"
+  },
+  {
+    "name": "Marcus Lee",
+    "profileImage": "https://randomuser.me/api/portraits/men/85.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+    "description": "Fitness coach helping people transform their lives through movement and mindset.",
+    "uploaded": "5 days ago",
+    "views": "12.9M views"
+  },
+   {
+    "name": "Peter Stiller",
+    "profileImage": "https://randomuser.me/api/portraits/women/44.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1503264116251-35a269479413",
+    "description": "Travel enthusiast and lifestyle blogger sharing stories from around the world.",
+    "uploaded": "3 days ago",
+    "views": "15M views"
+  },
+  {
+    "name": "David Menon",
+    "profileImage": "https://randomuser.me/api/portraits/men/32.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1522199710521-72d69614c702",
+    "description": "Tech geek and startup mentor passionate about building scalable solutions.",
+    "uploaded": "10 week ago",
+    "views": "8.2M views"
+  },
+  {
+    "name": "Klemens Torres",
+    "profileImage": "https://randomuser.me/api/portraits/women/68.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+    "description": "Digital artist exploring surrealism and abstract visual storytelling.",
+    "uploaded": "23 days ago",
+    "views": "4.7M views"
+  },
+  {
+    "name": "Aalvin Lee",
+    "profileImage": "https://randomuser.me/api/portraits/men/85.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+    "description": "Fitness coach helping people transform their lives through movement and mindset.",
+    "uploaded": "9 days ago",
+    "views": "12.9M views"
+  },
+   {
+    "name": "Nicolas Hafen",
+    "profileImage": "https://randomuser.me/api/portraits/women/44.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1503264116251-35a269479413",
+    "description": "Travel enthusiast and lifestyle blogger sharing stories from around the world.",
+    "uploaded": "3 days ago",
+    "views": "90M views"
+  },
+  {
+    "name": "Doll Menon",
+    "profileImage": "https://randomuser.me/api/portraits/men/32.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1522199710521-72d69614c702",
+    "description": "Tech geek and startup mentor passionate about building scalable solutions.",
+    "uploaded": "2 week ago",
+    "views": "9.2M views"
+  },
+  {
+    "name": "Geeta Torres",
+    "profileImage": "https://randomuser.me/api/portraits/women/68.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+    "description": "Digital artist exploring surrealism and abstract visual storytelling.",
+    "uploaded": "5 days ago",
+    "views": "9.7M views"
+  },
+  {
+    "name": "Seeta Lee",
+    "profileImage": "https://randomuser.me/api/portraits/men/85.jpg",
+    "backgroundImage": "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+    "description": "Fitness coach helping people transform their lives through movement and mindset.",
+    "uploaded": "9 days ago",
+    "views": "19.9M views"
+  }
+]
