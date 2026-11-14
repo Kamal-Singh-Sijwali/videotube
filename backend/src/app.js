@@ -28,6 +28,17 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+// Auto-connect DB for Serverless environments (Vercel)
+import connectDB from "./db/index.js";
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+    } catch (err) {
+        console.warn("Serverless DB connection check:", err.message);
+    }
+    next();
+});
+
 // ************* routes import **************
 import userRouter from "./routes/user.routes.js";
 import videoRouter from "./routes/video.routes.js";
@@ -58,5 +69,6 @@ app.use((err, req, res, next) => {
         errors: err.errors || []
     });
 });
+
 
 export { app };
