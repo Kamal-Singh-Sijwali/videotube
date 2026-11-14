@@ -10,6 +10,11 @@ try {
 }
 
 const connectDB = async () => {
+    // If already connected, reuse connection (essential for Vercel serverless)
+    if (mongoose.connection.readyState >= 1) {
+        return mongoose.connection;
+    }
+
     try {
         let rawUrl = process.env.MONGODB_URL || "";
         let connectionString = rawUrl;
