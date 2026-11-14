@@ -1,69 +1,102 @@
-import mongoose, { isValidObjectId } from "mongoose";
+import mongoose from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
-import { User } from "../models/user.model.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { Subscription } from "../models/subscription.model.js";
 
 const toggleSubscription = asyncHandler(async (req, res) => {
   const { channelId } = req.params;
-  // TODO: toggle subscription
-  if (!channelId) {
-    throw new apiError(400, "channel is required");
+
+  if (!channelId || !mongoose.isValidObjectId(channelId)) {
+    throw new apiError(400, "Valid channel ID is required");
   }
 
-  const userChannel = await Subscription.findOne({
+  if (channelId.toString() === req.user._id.toString()) {
+    throw new apiError(400, "You cannot subscribe to your own channel");
+  }
+
+  const existingSubscription = await Subscription.findOne({
     channel: channelId,
     subscriber: req.user._id,
   });
-  if (userChannel) {
-    await Subscription.findByIdAndDelete(userChannel._id);
-    userChannel.isSubscribed = false;
-    return res
-      .status(200)
-      .json(new apiResponse(200, userChannel, `Channel is Unsubscribed`));
+
+  let isSubscribed = false;
+  if (existingSubscription) {
+    await Subscription.findByIdAndDelete(existingSubscription._id);
+    isSubscribed = false;
   } else {
-    const newSubscription = await Subscription.create({
+    await Subscription.create({
       channel: channelId,
       subscriber: req.user._id,
     });
-    newSubscription.isSubscribed = true;
-    // userChannel.push(newSubscription);
-    return res
-      .status(200)
-      .json(new apiResponse(200, newSubscription, `Channel is Subscribed :`));
+    isSubscribed = true;
   }
 
+  const subscribersCount = await Subscription.countDocuments({ channel: channelId });
 
+  return res.status(200).json(
+    new apiResponse(
+      200,
+      { isSubscribed, subscribersCount },
+      isSubscribed ? "Channel subscribed" : "Channel unsubscribed"
+    )
+  );
+});
+
+const getSubscriptionStatus = asyncHandler(async (req, res) => {
+  const { channelId } = req.params;
+
+  if (!channelId || !mongoose.isValidObjectId(channelId)) {
+    throw new apiError(400, "Valid channel ID is required");
+  }
+
+  const subscribersCount = await Subscription.countDocuments({ channel: channelId });
+  let isSubscribed = false;
+
+  if (req.user?._id) {
+    const sub = await Subscription.findOne({
+      channel: channelId,
+      subscriber: req.user._id
+    });
+    if (sub) isSubscribed = true;
+  }
+
+  return res.status(200).json(
+    new apiResponse(200, { isSubscribed, subscribersCount }, "Subscription status fetched")
+  );
 });
 
 // controller to return subscriber list of a channel
 const getUserChannelSubscribers = asyncHandler(async (req, res) => {
   const { channelId } = req.params;
-  if(!channelId){
-    throw new apiError(400,"Channel id is required")
+  if (!channelId || !mongoose.isValidObjectId(channelId)) {
+    throw new apiError(400, "Valid channel ID is required");
   }
   const subscribers = await Subscription.find({ channel: channelId })
-//   .populate(
-//     "username email"
-//   );
-  console.log("lll",subscribers)
-  return res.status(200)
-  .json(new apiResponse(200,subscribers,`Your have been subscribed by ${subscribers?.length} people`))
+    .populate("subscriber", "fullName username avatar");
+
+  return res.status(200).json(
+    new apiResponse(200, subscribers, `Channel has ${subscribers.length} subscribers`)
+  );
 });
 
 // controller to return channel list to which user has subscribed
 const getSubscribedChannels = asyncHandler(async (req, res) => {
-  const { subscriberId } = req.params;
-    if(!subscriberId){
-    throw new apiError(400,"subscriber id is required")
+  const targetId = req.params.subscriberId || req.user?._id;
+  if (!targetId || !mongoose.isValidObjectId(targetId)) {
+    throw new apiError(400, "Valid subscriber ID is required");
   }
-  const subscribers = await Subscription.find({ subscriber: subscriberId })
+  const subscriptions = await Subscription.find({ subscriber: targetId })
+    .populate("channel", "fullName username avatar");
 
-  console.log("lll",subscribers)
-  return res.status(200)
-  .json(new apiResponse(200,subscribers,`You have subscribed ${subscribers?.length} channels`))
-
+  return res.status(200).json(
+    new apiResponse(200, subscriptions, `Subscribed to ${subscriptions.length} channels`)
+  );
 });
 
-export { toggleSubscription, getUserChannelSubscribers, getSubscribedChannels };
+export {
+  toggleSubscription,
+  getSubscriptionStatus,
+  getUserChannelSubscribers,
+  getSubscribedChannels
+};

@@ -12,7 +12,7 @@ const generateAccessAndRefreshToken = async (userId) => {
     const accesstoken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
-    user.refreshtoken = refreshToken;
+    user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
 
     return { accesstoken, refreshToken };
@@ -182,7 +182,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 // ========= refresh access token ==========
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken;
+  const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
   if (!incomingRefreshToken) {
     throw new apiError(401, "Unauthorized request");
@@ -194,7 +194,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    const user = await user.findById(decodedToken?._id);
+    const user = await User.findById(decodedToken?._id);
 
     if (!user) {
       throw new apiError(401, "Invalid refresh token");
@@ -209,7 +209,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       secure: true,
     };
 
-    const { accesstoken, newRefreshToken } =
+    const { accesstoken, refreshToken: newRefreshToken } =
       await generateAccessAndRefreshToken(user._id);
 
     return res
@@ -357,7 +357,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     },
     {
       $lookup: {
-        from: "subscribers",
+        from: "subscriptions",
         localField: "_id",
         foreignField: "channel", // to get subscribers
         as: "subscribers",
@@ -365,7 +365,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     },
     {
       $lookup: {
-        from: "subscribers",
+        from: "subscriptions",
         localField: "_id",
         foreignField: "subscriber", // subscribed to
         as: "subscribedTo",
@@ -394,31 +394,19 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
         username:1,
         avatar:1,
         coverImage:1,
-        username:1,
         subscriberCounts:1,
         channelSubscribeToCount:1,
         isSubscribed:1
-
       }
     }
-
-
-
-
   ]);
 
-  
+  if(!channel.length){
+    throw new apiError(404,"channel does not exists")
+  }
 
-// check console of channel and check dataype then work further
-   
-if(!channel.length){
-  throw new apiError(400,"channel does not exists")
-}
-
-return res.status(200).
-json(new apiResponse(200,channel[0],"fetched successfully"))
-
-
+  return res.status(200)
+    .json(new apiResponse(200,channel[0],"fetched successfully"))
 });
 
 // ============== watch history = ============ 
@@ -432,9 +420,9 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
     {
       $lookup:{
         from:"videos",
-        localField:"watchHistoy",
+        localField:"watchHistory",
         foreignField:"_id",
-        as:"watchHistoy",
+        as:"watchHistory",
         pipeline:[
           {
             $lookup:{
@@ -449,7 +437,6 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
                     username:1,
                     avatar:1,
                     coverImage:1,
-
                   }
                 }
               ]
@@ -465,12 +452,11 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
         ]
       }
     },
- 
-  ])
-return res.status(200)
-        .json(new apiResponse(200,user[0].wathHistory,"Watch history fetched successfully"))
+  ]);
 
-})
+  return res.status(200)
+    .json(new apiResponse(200, user[0]?.watchHistory || [], "Watch history fetched successfully"))
+});
 
 export {
   registerUser,

@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { getLikedVideos, toggleCommentLike, toggleTweetLike, toggleVideoLike } from "../controllers/likes.controllers.js";
+import { verifyJWT, optionalVerifyJWT } from "../middlewares/auth.middleware.js";
+import { getLikedVideos, getVideoLikeStatus, toggleCommentLike, toggleTweetLike, toggleVideoLike } from "../controllers/likes.controllers.js";
 
-const router = Router()
+const router = Router();
 
-router.get("/:videoId",verifyJWT,toggleVideoLike)
-router.get("/c/:commentId",verifyJWT,toggleCommentLike)
-router.get("/t/:tweetId",verifyJWT,toggleTweetLike)
-router.get("/all/:videoId",verifyJWT,getLikedVideos)
+router.route("/status/:videoId").get(optionalVerifyJWT, getVideoLikeStatus);
+router.route("/videos").get(verifyJWT, getLikedVideos);
+router.route("/:videoId").post(verifyJWT, toggleVideoLike).get(verifyJWT, toggleVideoLike);
+router.route("/c/:commentId").post(verifyJWT, toggleCommentLike).get(verifyJWT, toggleCommentLike);
+router.route("/t/:tweetId").post(verifyJWT, toggleTweetLike).get(verifyJWT, toggleTweetLike);
 
-export default router
+export default router;

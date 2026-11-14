@@ -6,23 +6,23 @@ const videoSchema = new mongoose.Schema(
     {
         videoFile:{
             type:String,
-            require:true,
+            required:true,
         },
         thumbnail:{
             type:String,
-            require:true,
+            required:true,
         },
          title:{
             type:String,
-            require:true,
+            required:true,
         },
          description:{
             type:String,
-            require:true,
+            required:true,
         },
          duration:{
             type:Number,
-            require:true,
+            default:0,
         },
          views:{
             type:Number,
@@ -30,7 +30,7 @@ const videoSchema = new mongoose.Schema(
         },
         isPublished:{
             type:Boolean,
-            default:false
+            default:true
         },
         owner:{
             type:mongoose.Schema.Types.ObjectId,

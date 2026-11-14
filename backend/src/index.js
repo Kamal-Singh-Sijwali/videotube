@@ -12,14 +12,17 @@ dotenv.config(
 );
 
 connectDB()
-.then(()=>{
-    app.listen(process.env.PORT || 8000 ,()=>{
-        console.log(`App is listing port ${process.env.PORT}`);
-    })
+.then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+        console.log(`App is listening on port ${process.env.PORT || 8000}`);
+    });
 })
-.catch((err)=>{
-    console.log("MONGO DB connection failed !!!",err)
-})
+.catch((err) => {
+    console.error("MongoDB connection failed! Starting server anyway...", err.message);
+    app.listen(process.env.PORT || 8000, () => {
+        console.log(`App is running on port ${process.env.PORT || 8000} (MongoDB disconnected - check IP Whitelist / DNS)`);
+    });
+});
 
 
 
