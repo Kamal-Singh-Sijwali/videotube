@@ -39,6 +39,14 @@ app.use(async (req, res, next) => {
     next();
 });
 
+// Root API health check / welcome route
+app.get("/api", (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: "VideoTube API is running live on Vercel!"
+    });
+});
+
 // ************* routes import **************
 import userRouter from "./routes/user.routes.js";
 import videoRouter from "./routes/video.routes.js";

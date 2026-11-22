@@ -2,7 +2,6 @@ import axios from "axios";
 import routes, { API_BASE_URL } from "../constant.js";
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
