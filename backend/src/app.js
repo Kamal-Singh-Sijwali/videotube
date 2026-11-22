@@ -56,6 +56,7 @@ import commemntsRouter from "./routes/comment.routes.js";
 import likesRouter from "./routes/like.routes.js";
 import tweetsRouter from "./routes/tweet.routes.js";
 import dashboardRouter from "./routes/dashboard.routes.js";
+import notificationRouter from "./routes/notification.routes.js";
 
 // routes declaration
 app.use("/api/v1/users", userRouter);
@@ -66,6 +67,7 @@ app.use("/api/v1/comment", commemntsRouter);
 app.use("/api/v1/like", likesRouter);
 app.use("/api/v1/tweet", tweetsRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
+app.use("/api/v1/notifications", notificationRouter);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

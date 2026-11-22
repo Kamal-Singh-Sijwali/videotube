@@ -50,6 +50,13 @@ const routes = {
     all: `${API_BASE_URL}/tweet/getAll`,
     create: `${API_BASE_URL}/tweet`,
     delete: (id) => `${API_BASE_URL}/tweet/${id}`,
+  },
+  notifications: {
+    all: `${API_BASE_URL}/notifications`,
+    markAllRead: `${API_BASE_URL}/notifications/read-all`,
+    markRead: (id) => `${API_BASE_URL}/notifications/${id}/read`,
+    delete: (id) => `${API_BASE_URL}/notifications/${id}`,
+    clearAll: `${API_BASE_URL}/notifications`,
   }
 };
 

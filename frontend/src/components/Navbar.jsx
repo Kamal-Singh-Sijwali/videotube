@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import NotificationDropdown from "./NotificationDropdown.jsx";
 import {
   YouTubeLogo,
   SearchIcon,
@@ -77,6 +78,8 @@ const Navbar = ({ onToggleSidebar, onOpenUpload }) => {
               <UploadIcon size={18} />
               <span style={{ fontSize: "13px", fontWeight: "600", lineHeight: "1" }}>Upload</span>
             </button>
+
+            <NotificationDropdown />
 
             <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
               <button
