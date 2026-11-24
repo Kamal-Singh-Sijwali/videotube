@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
 import { Like } from "../models/like.model.js";
+import { Video } from "../models/video.model.js";
+import { Comment } from "../models/comment.model.js";
+import { Tweet } from "../models/tweet.model.js";
+import { Notification } from "../models/notification.model.js";
 import { apiResponse } from "../utils/apiResponse.js";
 
 const toggleVideoLike = asyncHandler(async (req, res) => {
@@ -25,6 +29,22 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
             likedBy: req.user?._id,
         });
         isLiked = true;
+
+        // Notify video owner
+        try {
+            const video = await Video.findById(videoId);
+            if (video && video.owner && video.owner.toString() !== req.user._id.toString()) {
+                await Notification.create({
+                    recipient: video.owner,
+                    sender: req.user._id,
+                    type: "like_video",
+                    video: video._id,
+                    content: `liked your video "${video.title?.slice(0, 45) || 'video'}"`
+                });
+            }
+        } catch (err) {
+            console.warn("Video like notification skipped:", err.message);
+        }
     }
 
     const likesCount = await Like.countDocuments({ video: videoId });
@@ -79,6 +99,23 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
             likedBy: req.user?._id,
         });
         isLiked = true;
+
+        // Notify comment owner
+        try {
+            const comment = await Comment.findById(commentId);
+            if (comment && comment.owner && comment.owner.toString() !== req.user._id.toString()) {
+                await Notification.create({
+                    recipient: comment.owner,
+                    sender: req.user._id,
+                    type: "like_comment",
+                    comment: comment._id,
+                    video: comment.video,
+                    content: `liked your comment: "${comment.content?.slice(0, 45) || ''}"`
+                });
+            }
+        } catch (err) {
+            console.warn("Comment like notification skipped:", err.message);
+        }
     }
 
     const likesCount = await Like.countDocuments({ comment: commentId });
@@ -109,6 +146,22 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
             likedBy: req.user?._id,
         });
         isLiked = true;
+
+        // Notify tweet owner
+        try {
+            const tweet = await Tweet.findById(tweetId);
+            if (tweet && tweet.owner && tweet.owner.toString() !== req.user._id.toString()) {
+                await Notification.create({
+                    recipient: tweet.owner,
+                    sender: req.user._id,
+                    type: "like_tweet",
+                    tweet: tweet._id,
+                    content: `liked your community post: "${tweet.content?.slice(0, 45) || ''}"`
+                });
+            }
+        } catch (err) {
+            console.warn("Tweet like notification skipped:", err.message);
+        }
     }
 
     const likesCount = await Like.countDocuments({ tweet: tweetId });

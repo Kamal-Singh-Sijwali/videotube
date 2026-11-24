@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
 import { Comment } from "../models/comment.model.js";
+import { Video } from "../models/video.model.js";
+import { Notification } from "../models/notification.model.js";
 import { apiResponse } from "../utils/apiResponse.js";
 
 const getVideoComments = asyncHandler(async (req, res) => {
@@ -38,6 +40,23 @@ const addComment = asyncHandler(async (req, res) => {
   });
 
   const populatedComment = await Comment.findById(comment._id).populate("owner", "fullName username avatar");
+
+  // Notify video owner
+  try {
+    const video = await Video.findById(videoId);
+    if (video && video.owner && video.owner.toString() !== req.user._id.toString()) {
+      await Notification.create({
+        recipient: video.owner,
+        sender: req.user._id,
+        type: "comment_video",
+        video: video._id,
+        comment: comment._id,
+        content: `commented on your video: "${content.trim().slice(0, 50)}"`
+      });
+    }
+  } catch (err) {
+    console.warn("Comment notification skipped:", err.message);
+  }
 
   return res.status(201).json(new apiResponse(201, populatedComment, "Comment added successfully"));
 });

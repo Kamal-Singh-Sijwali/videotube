@@ -3,6 +3,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { Subscription } from "../models/subscription.model.js";
+import { Notification } from "../models/notification.model.js";
 
 const toggleSubscription = asyncHandler(async (req, res) => {
   const { channelId } = req.params;
@@ -30,6 +31,18 @@ const toggleSubscription = asyncHandler(async (req, res) => {
       subscriber: req.user._id,
     });
     isSubscribed = true;
+
+    // Notify channel owner
+    try {
+      await Notification.create({
+        recipient: channelId,
+        sender: req.user._id,
+        type: "subscribe_channel",
+        content: `subscribed to your channel`
+      });
+    } catch (err) {
+      console.warn("Subscribe notification skipped:", err.message);
+    }
   }
 
   const subscribersCount = await Subscription.countDocuments({ channel: channelId });

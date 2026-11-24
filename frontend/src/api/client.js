@@ -82,4 +82,12 @@ export const tweetApi = {
   deleteTweet: (tweetId) => api.delete(routes.tweets.delete(tweetId)),
 };
 
+export const notificationApi = {
+  getNotifications: () => api.get(routes.notifications.all),
+  markAllRead: () => api.patch(routes.notifications.markAllRead),
+  markRead: (id) => api.patch(routes.notifications.markRead(id)),
+  deleteNotification: (id) => api.delete(routes.notifications.delete(id)),
+  clearAll: () => api.delete(routes.notifications.clearAll),
+};
+
 export default api;
